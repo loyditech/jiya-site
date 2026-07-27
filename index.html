@@ -7,6 +7,8 @@
 
 
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Caveat:wght@500;600;700&family=Nunito+Sans:wght@300;400;600&display=swap');
+
   :root{
     --plum: #1c1023;
     --aubergine: #2f1a3d;
@@ -18,8 +20,6 @@
     --paper: #fbf6ec;
     --ink: #3a2a4a;
   }
-
-  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Caveat:wght@500;600;700&family=Nunito+Sans:wght@300;400;600&display=swap');
 
   *{ margin:0; padding:0; box-sizing:border-box; }
   html{ scroll-behavior: smooth; }
@@ -369,17 +369,17 @@
 
 <!-- ============ SECTION 4: PHOTO ============ -->
 <section id="photo">
-  <h2>My favorite picture of us</h2>
+  <h2>my favorite picture of us</h2>
   <figure class="polaroid">
     <img id="ourPhoto" alt="Us together"
       onerror="this.alt='📷 add your photo file — see CONFIG.photo in the script';">
-    <figcaption id="photoCaption"> us, alway💜</figcaption>
+    <figcaption id="photoCaption">us, always 💜</figcaption>
   </figure>
 </section>
 
 <!-- ============ SECTION 5: SONG ============ -->
 <section id="song">
-  <h2>Song dedicated to you</h2>
+  <h2>our song</h2>
   <p class="sub">press play, close your eyes</p>
   <div class="vinyl-card">
     <div class="vinyl" id="vinyl"></div>
@@ -389,15 +389,13 @@
       <audio id="audio" controls></audio>
     </div>
   </div>
-  <div class="footer-note" id="finalNote"></div>
+  <div class="footer-note" id="finalNote">happy monthsary, I love you 💜</div>
 </section>
 
 <script>
-/* =========================================================
-   CONFIG — edit everything here, nothing else needs to change
-========================================================= */
+
 const CONFIG = {
-  herName: "Baby",                 // used nowhere visible right now, kept for your own reference
+  herName: "Baby",                 
   teaserLines: [
     "Hello baby,",
     "before you scroll any further...",
@@ -426,19 +424,19 @@ Thank you for staying, for loving me, and for taking care of me even in the litt
 
 I know things aren't always easy, may mga araw na mahirap, may mga gulo minsan, pero I want you to know na hindi 'yon nagbabago sa kung gaano kita kamahal. If anything, lalo lang lumalalim ang pagmamahal ko sayo sa bawat araw na tayo.
 
-I'll always be your safe place, someone you can lean on, the one who makes you laugh, and the reason you'll never feel alone. Whatever you're going through, you're never facing it by yourself, kasi nandito ako, and I will always be here for you.
+I'll always be your safe place, someone you can lean on, the one who makes you laugh, and the reason you'll never feel alone. Whatever you're going through, you're never facing it by yourself, kasi nandito lang ako, isang tawag lang ang layo.
 
 Here's to more months, more memories, and more us. Sana patuloy lang tayong lumago, patuloy tayong sumuporta sa isa't isa, and patuloy tayong mahalin ang isa't isa.
 
-Also — goodluck sa class mo, my future engineer! Alam kong hindi magiging madali ang path, pero naniniwala ako na kaya mo 'yan, at proud na proud ako sayo, always. I love you so much, baby.`,
+Also — goodluck sa class mo, future engineer! Alam kong mahirap 'yang kinukuha mong course, pero kaya mo 'yan, at proud na proud ako sayo, always. I love you so much, baby. Iloveyouuusomuch, hehehe.`,
   letterSign: "— your poging boyfriend(husband) jeyel 💜",
 
   ourSongFile: "song.mp3",
   ourSongTitle: "Someday",
   ourSongArtist: "The Ridleys",
 
-  bgMusicFile: "bgmusic.mp3",   // plays automatically the moment she taps Yes
-  yesGif: "yesreaction.gif",     // shown right after she taps Yes
+  bgMusicFile: "bgmusic.mp3",   
+  yesGif: "yesreaction.gif",     
 
   finalNote: " I love you so much, baby 💜"
 };
@@ -533,7 +531,6 @@ function teleportNo(){
   reactionLine.textContent = CONFIG.reactionPhrases[(dodgeCount-1) % CONFIG.reactionPhrases.length];
 }
 
-// desktop: dodge as soon as the cursor gets close, not just on exact hover
 document.addEventListener('mousemove', (e) => {
   if(!noBtn.classList.contains('roaming')) return;
   const r = noBtn.getBoundingClientRect();
@@ -544,8 +541,7 @@ document.addEventListener('mousemove', (e) => {
 noBtn.addEventListener('mouseenter', teleportNo);
 noBtn.addEventListener('click', (e) => { e.preventDefault(); teleportNo(); });
 
-// mobile: first tap anywhere near it teleports it, and it also
-// jumps away as soon as a touch starts moving nearby
+
 noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); teleportNo(); }, {passive:false});
 document.addEventListener('touchmove', (e) => {
   if(!noBtn.classList.contains('roaming')) return;
@@ -556,11 +552,7 @@ document.addEventListener('touchmove', (e) => {
   if(dist < 70) teleportNo();
 }, {passive:true});
 
-/* =========================================================
-   YES — heart draw animation, gif, auto-play bg music.
-   She now taps/clicks anywhere on the screen when she's
-   ready to continue, instead of it auto-advancing.
-========================================================= */
+
 const bgMusic = new Audio(CONFIG.bgMusicFile);
 bgMusic.loop = true;
 bgMusic.volume = 0.55;
@@ -575,8 +567,7 @@ yesBtn.addEventListener('click', () => {
   bgMusic.currentTime = 0;
   bgMusic.play().then(() => { muteBtn.style.display = 'flex'; }).catch(()=>{});
 
-  // only allow moving on once the heart + gif + hint have fully
-  // played out, so she has time to actually see everything
+ 
   setTimeout(() => { canAdvance = true; }, 2900);
 });
 
@@ -591,8 +582,7 @@ muteBtn.addEventListener('click', () => {
   muteBtn.textContent = bgMusic.muted ? '🔇' : '🔊';
 });
 
-// pause the background music once she reaches the dedicated song
-// player, so the two tracks don't play over each other
+
 const songSection = document.getElementById('song');
 const audioEl = document.getElementById('audio');
 const io = new IntersectionObserver((entries) => {
