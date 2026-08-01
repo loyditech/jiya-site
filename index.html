@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>FOR BABY JIYA 💜</title>
+<title>For my BABY JIYA 💜</title>
 
 
 <style>
@@ -76,7 +76,7 @@
     text-align: center;
   }
 
-  
+  /* ---------------- floating mute control ---------------- */
   #muteBtn{
     position: fixed;
     bottom: 22px; right: 22px;
@@ -150,7 +150,7 @@
     color: var(--paper);
     border: 1.5px solid rgba(255,255,255,0.35);
   }
-  
+  /* once she starts dodging it, it becomes fixed to roam the whole screen */
   .btn-no.roaming{
     position: fixed;
     z-index: 40;
@@ -165,7 +165,7 @@
     min-height: 1.7rem;
   }
 
-  
+  /* full-screen heart-draw + gif moment on YES */
   #yes-moment{
     position: fixed;
     inset: 0;
@@ -315,6 +315,29 @@
   .song-title{ font-weight:600; font-size:1rem; }
   .song-artist{ font-size:0.82rem; color:var(--lilac); margin-bottom:0.55rem; }
   audio{ width:100%; }
+  .video-frame{
+    margin-top: 2.2rem;
+    width: min(75vw, 280px);
+    aspect-ratio: 9 / 16;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 25px 55px rgba(0,0,0,0.45);
+    border: 1px solid rgba(255,255,255,0.12);
+    background: #000;
+  }
+  .video-frame video{
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background: #000;
+  }
+  .video-caption{
+    margin-top: 1rem;
+    font-family: 'Caveat', cursive;
+    font-size: 1.25rem;
+    color: var(--lilac);
+  }
   #song .footer-note{ margin-top:2.8rem; font-family:'Caveat', cursive; font-size:1.35rem; color:var(--petal); }
 
   @media (prefers-reduced-motion: reduce){ *{ animation:none !important; transition:none !important; } }
@@ -337,7 +360,7 @@
   <div id="reaction-line"></div>
 </section>
 
-
+<!-- full screen yes moment -->
 <div id="yes-moment">
   <svg id="heartSvg" viewBox="0 0 100 90">
     <path d="M50 82 C 20 60, 2 40, 2 22 C 2 6, 18 -2, 32 6 C 40 11, 46 18, 50 26 C 54 18, 60 11, 68 6 C 82 -2, 98 6, 98 22 C 98 40, 80 60, 50 82 Z"/>
@@ -369,7 +392,7 @@
 
 <!-- ============ SECTION 4: PHOTO ============ -->
 <section id="photo">
-  <h2>OUR CUTE MOMENTS</h2>
+  <h2>my favorite picture of us</h2>
   <figure class="polaroid">
     <img id="ourPhoto" alt="Us together"
       onerror="this.alt='📷 add your photo file — see CONFIG.photo in the script';">
@@ -389,7 +412,11 @@
       <audio id="audio" controls></audio>
     </div>
   </div>
-  <div class="footer-note" id="finalNote"></div>
+  <div class="video-frame">
+    <video id="ourVideo" playsinline loop></video>
+  </div>
+  <div class="video-caption">us, while our someday plays 💜</div>
+  <div class="footer-note" id="finalNote">happy monthsary, I love you 💜</div>
 </section>
 
 <script>
@@ -405,8 +432,8 @@ const CONFIG = {
   reactionPhrases: [
     "hindi kita hahayaang mag-'no' 😤",
     "the universe already said yes 💜",
-    "aray mo, try mo pa 😏",
-    "sisiw lang 'to sayo",
+    "aray mo hahahha 😏",
+    "sisiw lang 'to sayo bebe",
     "sayang effort mo diyan bebe hehe",
     "okay na okay, wag ka nang mahirapan 😭"
   ],
@@ -415,7 +442,7 @@ const CONFIG = {
   photo: "us.png",
   photoCaption: "us, always 💜",
 
-  letterHeading: "To my favorite person,",
+  letterHeading: "To my baby,",
   letterBody: `Happy August 1st, baby.
 
   I just want you to know how much you mean to me. Every single day with you feels lighter, even the ordinary ones, just because you're in it. You have this way of making the simplest moments feel special, and I don't think you even realize how much that means to me.
@@ -424,17 +451,18 @@ Thank you for staying, for loving me, and for taking care of me even in the litt
 
 I know things aren't always easy, may mga araw na mahirap, may mga gulo minsan, pero I want you to know na hindi 'yon nagbabago sa kung gaano kita kamahal. If anything, lalo lang lumalalim ang pagmamahal ko sayo sa bawat araw na tayo.
 
-I'll always be your safe place, someone you can lean on, the one who makes you laugh, and the reason you'll never feel alone. Whatever you're going through, you're never facing it by yourself, kasi nandito lang ako, mananatiling nandito para sayo.
+I'll always be your safe place, someone you can lean on, the one who makes you laugh, and the reason you'll never feel alone. Whatever you're going through, you're never facing it by yourself, kasi nandito lang ako, mananatili akong nandito para sayo.
+Pasensya na baby, eto lang sa ngayon mabigay ko sayo, pero hayaan mo babawi ako. I hope this simple gift reminds you of how much I love you, and how much I want to make you happy.
 
 Here's to more months, more memories, and more us. Sana patuloy lang tayong lumago, patuloy tayong sumuporta sa isa't isa, and patuloy tayong mahalin ang isa't isa.
 
-Also — goodluck sa class mo, my future engineer! Alam kong hindi madali ang magiging path, pero naniniwala ako na kaya mo 'yan, at proud na proud ako sayo, always. I love you so much, baby.`,
+Also — goodluck sa class mo, my future engineer! Alam kong hindi magiging madali ang path, pero naniniwala ako na kaya mo 'yan, at proud na proud ako sayo, always. I love you so much, baby. .`,
   letterSign: "— your poging boyfriend(husband) jeyel 💜",
 
   ourSongFile: "song.mp3",
   ourSongTitle: "Someday",
   ourSongArtist: "The Ridleys",
-
+  ourVideoFile: "us.mp4",   
   bgMusicFile: "bgmusic.mp3",   
   yesGif: "yesreaction.gif",     
 
@@ -451,6 +479,7 @@ document.getElementById('photoCaption').textContent = CONFIG.photoCaption;
 document.getElementById('songTitle').textContent = CONFIG.ourSongTitle;
 document.getElementById('songArtist').textContent = CONFIG.ourSongArtist;
 document.getElementById('audio').src = CONFIG.ourSongFile;
+document.getElementById('ourVideo').src = CONFIG.ourVideoFile;
 document.getElementById('finalNote').textContent = CONFIG.finalNote;
 document.getElementById('reactionGif').src = CONFIG.yesGif;
 document.getElementById('yesCaption').textContent = CONFIG.yesCaption;
@@ -522,6 +551,7 @@ function teleportNo(){
   reactionLine.textContent = CONFIG.reactionPhrases[(dodgeCount-1) % CONFIG.reactionPhrases.length];
 }
 
+
 document.addEventListener('mousemove', (e) => {
   if(!noBtn.classList.contains('roaming')) return;
   const r = noBtn.getBoundingClientRect();
@@ -532,7 +562,8 @@ document.addEventListener('mousemove', (e) => {
 noBtn.addEventListener('mouseenter', teleportNo);
 noBtn.addEventListener('click', (e) => { e.preventDefault(); teleportNo(); });
 
-
+// mobile: first tap anywhere near it teleports it, and it also
+// jumps away as soon as a touch starts moving nearby
 noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); teleportNo(); }, {passive:false});
 document.addEventListener('touchmove', (e) => {
   if(!noBtn.classList.contains('roaming')) return;
@@ -558,7 +589,7 @@ yesBtn.addEventListener('click', () => {
   bgMusic.currentTime = 0;
   bgMusic.play().then(() => { muteBtn.style.display = 'flex'; }).catch(()=>{});
 
- 
+  
   setTimeout(() => { canAdvance = true; }, 2900);
 });
 
@@ -598,6 +629,15 @@ envelope.addEventListener('click', () => {
 const vinyl = document.getElementById('vinyl');
 audioEl.addEventListener('play', () => vinyl.classList.add('spinning'));
 audioEl.addEventListener('pause', () => vinyl.classList.remove('spinning'));
+
+
+const ourVideo = document.getElementById('ourVideo');
+audioEl.addEventListener('play', () => {
+  ourVideo.currentTime = audioEl.currentTime;
+  ourVideo.play().catch(()=>{});
+});
+audioEl.addEventListener('pause', () => ourVideo.pause());
+audioEl.addEventListener('seeked', () => { ourVideo.currentTime = audioEl.currentTime; });
 </script>
 
 </body>
