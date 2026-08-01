@@ -431,7 +431,6 @@
       <div class="song-title" id="songTitle">Song Title Here</div>
       <div class="song-artist" id="songArtist">Artist Name</div>
       <button class="play-toggle" id="playToggle">▶ Play</button>
-      <audio id="audio" style="display:none" preload="auto"></audio>
     </div>
   </div>
   <div class="video-frame">
@@ -487,7 +486,7 @@ Also — goodluck sa class mo, my future engineer! Alam kong hindi madali ang ma
 
   // YouTube (unlisted) video — put the video ID only (the part after
   // "v=" in the URL, or after youtu.be/), NOT the whole link
-  youtubeVideoId: "Kzf29yvbiDs",
+  youtubeVideoId: "e53UUxF5yd0",
 
   bgMusicFile: "bgmusic.mp3",   
   yesGif: "yesreaction.gif",     
@@ -508,9 +507,8 @@ document.getElementById('finalNote').textContent = CONFIG.finalNote;
 document.getElementById('reactionGif').src = CONFIG.yesGif;
 document.getElementById('yesCaption').textContent = CONFIG.yesCaption;
 
-// audio element lives in the DOM (hidden), driven by our custom play/pause button
-const audioEl = document.getElementById('audio');
-audioEl.src = CONFIG.ourSongFile;
+// hidden audio element, driven entirely by our custom play/pause button
+const audioEl = new Audio(CONFIG.ourSongFile);
 
 
 const petalField = document.getElementById('petalField');
@@ -686,7 +684,7 @@ let isPlaying = false;
 
 playToggle.addEventListener('click', () => {
   if(!isPlaying){
-    audioEl.play().catch((err)=>{ console.error('audio play failed:', err); });
+    audioEl.play().catch(()=>{});
     if(ytReady){ try{ ytPlayer.playVideo(); }catch(e){} }
     playToggle.textContent = '⏸ Pause';
     isPlaying = true;
@@ -696,10 +694,6 @@ playToggle.addEventListener('click', () => {
     playToggle.textContent = '▶ Play';
     isPlaying = false;
   }
-});
-
-audioEl.addEventListener('error', () => {
-  playToggle.textContent = '⚠️ song.mp3 not found';
 });
 
 audioEl.addEventListener('ended', () => {
