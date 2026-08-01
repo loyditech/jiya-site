@@ -314,7 +314,25 @@
   .song-info{ text-align:left; flex:1; }
   .song-title{ font-weight:600; font-size:1rem; }
   .song-artist{ font-size:0.82rem; color:var(--lilac); margin-bottom:0.55rem; }
-  audio{ width:100%; }
+
+  /* custom play/pause control replaces native audio controls, so we can
+     fire the audio + video play() calls together in one tap (needed for
+     iOS Safari to allow sound on both) */
+  .play-toggle{
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.4rem;
+    background: linear-gradient(135deg, var(--gold), #e8b4d8);
+    color: #3a1030;
+    border: none;
+    border-radius: 999px;
+    padding: 0.55rem 1.3rem;
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
 
   /* Google Drive embedded video — portrait frame */
   .video-frame{
@@ -412,7 +430,7 @@
     <div class="song-info">
       <div class="song-title" id="songTitle">Song Title Here</div>
       <div class="song-artist" id="songArtist">Artist Name</div>
-      <audio id="audio" controls></audio>
+      <button class="play-toggle" id="playToggle">▶ Play</button>
     </div>
   </div>
   <div class="video-frame">
@@ -485,10 +503,12 @@ document.getElementById('ourPhoto').src = CONFIG.photo;
 document.getElementById('photoCaption').textContent = CONFIG.photoCaption;
 document.getElementById('songTitle').textContent = CONFIG.ourSongTitle;
 document.getElementById('songArtist').textContent = CONFIG.ourSongArtist;
-document.getElementById('audio').src = CONFIG.ourSongFile;
 document.getElementById('finalNote').textContent = CONFIG.finalNote;
 document.getElementById('reactionGif').src = CONFIG.yesGif;
 document.getElementById('yesCaption').textContent = CONFIG.yesCaption;
+
+// hidden audio element, driven entirely by our custom play/pause button
+const audioEl = new Audio(CONFIG.ourSongFile);
 
 
 const petalField = document.getElementById('petalField');
@@ -610,7 +630,6 @@ muteBtn.addEventListener('click', () => {
 
 
 const songSection = document.getElementById('song');
-const audioEl = document.getElementById('audio');
 const io = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if(entry.isIntersecting && !bgMusic.paused){
@@ -635,10 +654,10 @@ audioEl.addEventListener('play', () => vinyl.classList.add('spinning'));
 audioEl.addEventListener('pause', () => vinyl.classList.remove('spinning'));
 
 /* =========================================================
-   YouTube player — synced with the audio player, so pressing
-   play/pause on the song also plays/pauses the video
+   YouTube player setup
 ========================================================= */
 let ytPlayer = null;
+let ytReady = false;
 const ytTag = document.createElement('script');
 ytTag.src = 'https://www.youtube.com/iframe_api';
 document.head.appendChild(ytTag);
@@ -648,17 +667,40 @@ window.onYouTubeIframeAPIReady = function(){
     videoId: CONFIG.youtubeVideoId,
     playerVars: { playsinline: 1, rel: 0, controls: 0, disablekb: 1, modestbranding: 1 },
     events: {
-      onReady: function(){
-        audioEl.addEventListener('play', () => {
-          try{ ytPlayer.playVideo(); }catch(e){}
-        });
-        audioEl.addEventListener('pause', () => {
-          try{ ytPlayer.pauseVideo(); }catch(e){}
-        });
-      }
+      onReady: function(){ ytReady = true; }
     }
   });
 };
+
+/* =========================================================
+   Custom play/pause button — calls BOTH audio.play() and
+   ytPlayer.playVideo() synchronously, in the SAME tap/click.
+   This is required for iOS Safari to allow sound on both;
+   triggering one from the other's event (as before) is too
+   "delayed" for Safari's autoplay rules and gets blocked.
+========================================================= */
+const playToggle = document.getElementById('playToggle');
+let isPlaying = false;
+
+playToggle.addEventListener('click', () => {
+  if(!isPlaying){
+    audioEl.play().catch(()=>{});
+    if(ytReady){ try{ ytPlayer.playVideo(); }catch(e){} }
+    playToggle.textContent = '⏸ Pause';
+    isPlaying = true;
+  } else {
+    audioEl.pause();
+    if(ytReady){ try{ ytPlayer.pauseVideo(); }catch(e){} }
+    playToggle.textContent = '▶ Play';
+    isPlaying = false;
+  }
+});
+
+audioEl.addEventListener('ended', () => {
+  playToggle.textContent = '▶ Play';
+  isPlaying = false;
+  if(ytReady){ try{ ytPlayer.pauseVideo(); }catch(e){} }
+});
 </script>
 
 </body>
