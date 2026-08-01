@@ -316,7 +316,7 @@
   .song-artist{ font-size:0.82rem; color:var(--lilac); margin-bottom:0.55rem; }
   audio{ width:100%; }
 
-  
+  /* Google Drive embedded video — portrait frame */
   .video-frame{
     margin-top: 2.2rem;
     width: min(90vw, 380px);
@@ -327,11 +327,12 @@
     border: 1px solid rgba(255,255,255,0.12);
     background: #000;
   }
-  .video-frame iframe{
+  .video-frame iframe, .video-frame #ourVideo{
     width: 100%;
     height: 100%;
     border: none;
     display: block;
+    pointer-events: none;
   }
   .video-caption{
     margin-top: 1rem;
@@ -405,9 +406,7 @@
 <!-- ============ SECTION 5: SONG ============ -->
 <section id="song">
   <h2>our song</h2>
-  <p class="sub">Press play on video first, then click audio to play.
-Enjoy the song and video together — I teared up making this for you, baby T_T</p>
-  </p>
+  <p class="sub">press play — the video plays right along with it 💜</p>
   <div class="vinyl-card">
     <div class="vinyl" id="vinyl"></div>
     <div class="song-info">
@@ -417,9 +416,9 @@ Enjoy the song and video together — I teared up making this for you, baby T_T<
     </div>
   </div>
   <div class="video-frame">
-    <iframe id="ourVideo" allow="autoplay" allowfullscreen></iframe>
+    <div id="ourVideo"></div>
   </div>
-  <div class="video-caption">us, while our someday plays 💜</div>
+  <div class="video-caption" id="videoHint"></div>
   <div class="footer-note" id="finalNote"></div>
 </section>
 
@@ -456,6 +455,7 @@ Thank you for staying, for loving me, and for taking care of me even in the litt
 I know things aren't always easy, may mga araw na mahirap, may mga gulo minsan, pero I want you to know na hindi 'yon nagbabago sa kung gaano kita kamahal. If anything, lalo lang lumalalim ang pagmamahal ko sayo sa bawat araw na tayo.
 
 I'll always be your safe place, someone you can lean on, the one who makes you laugh, and the reason you'll never feel alone. Whatever you're going through, you're never facing it by yourself, kasi nandito lang ako, mananatiling nandito para sayo.
+Pasensyan na baby, wala akong physical gift na maibigay sayo ngayon, pero sana magustuhan mo ang simpleng gift na ito bilang simbolo ng pagmamahal ko sayo.
 
 Here's to more months, more memories, and more us. Sana patuloy lang tayong lumago, patuloy tayong sumuporta sa isa't isa, and patuloy tayong mahalin ang isa't isa.
 
@@ -466,8 +466,9 @@ Also — goodluck sa class mo, my future engineer! Alam kong hindi madali ang ma
   ourSongTitle: "Someday",
   ourSongArtist: "The Ridleys",
 
-  
-  driveVideoId: "14NTFZvCaSFjO_wkP0cpujgCGUi9ALDNU",
+  // YouTube (unlisted) video — put the video ID only (the part after
+  // "v=" in the URL, or after youtu.be/), NOT the whole link
+  youtubeVideoId: "Kzf29yvbiDs",
 
   bgMusicFile: "bgmusic.mp3",   
   yesGif: "yesreaction.gif",     
@@ -488,7 +489,6 @@ document.getElementById('audio').src = CONFIG.ourSongFile;
 document.getElementById('finalNote').textContent = CONFIG.finalNote;
 document.getElementById('reactionGif').src = CONFIG.yesGif;
 document.getElementById('yesCaption').textContent = CONFIG.yesCaption;
-document.getElementById('ourVideo').src = `https://drive.google.com/file/d/${CONFIG.driveVideoId}/preview`;
 
 
 const petalField = document.getElementById('petalField');
@@ -633,6 +633,32 @@ envelope.addEventListener('click', () => {
 const vinyl = document.getElementById('vinyl');
 audioEl.addEventListener('play', () => vinyl.classList.add('spinning'));
 audioEl.addEventListener('pause', () => vinyl.classList.remove('spinning'));
+
+/* =========================================================
+   YouTube player — synced with the audio player, so pressing
+   play/pause on the song also plays/pauses the video
+========================================================= */
+let ytPlayer = null;
+const ytTag = document.createElement('script');
+ytTag.src = 'https://www.youtube.com/iframe_api';
+document.head.appendChild(ytTag);
+
+window.onYouTubeIframeAPIReady = function(){
+  ytPlayer = new YT.Player('ourVideo', {
+    videoId: CONFIG.youtubeVideoId,
+    playerVars: { playsinline: 1, rel: 0, controls: 0, disablekb: 1, modestbranding: 1 },
+    events: {
+      onReady: function(){
+        audioEl.addEventListener('play', () => {
+          try{ ytPlayer.playVideo(); }catch(e){}
+        });
+        audioEl.addEventListener('pause', () => {
+          try{ ytPlayer.pauseVideo(); }catch(e){}
+        });
+      }
+    }
+  });
+};
 </script>
 
 </body>
